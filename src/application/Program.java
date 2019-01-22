@@ -30,13 +30,11 @@ public class Program {
 			checkin = sdf.parse(sc.next());
 			System.out.print("CheckOut date (dd/MM/yyyy): ");
 			checkout = sdf.parse(sc.next());
-			Date now = new Date();
-			if(checkin.before(now) || checkout.before(now)) {
-				System.out.println("Error in resevation: Resevation dates for update must be future dates");
-			}else if(!checkout.after(checkin)) {
-				System.out.println("Error in resevation: Check-out date must be after check-in date");
+			
+		String error = reseva.updateDates(checkin, checkout);
+			if(error != null) {
+				System.out.println("Error in resevation: " + error);
 			}else {
-				reseva.updateDates(checkin, checkout);
 				System.out.println("Resevation: " + reseva);
 			}
 		}
