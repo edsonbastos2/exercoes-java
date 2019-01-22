@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Resevation {
 	private Integer roomNumber;
 	private Date checkin;
@@ -11,7 +13,10 @@ public class Resevation {
 	
 	public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public Resevation(Integer roomNumber, Date checkin, Date checkOut) {
+	public Resevation(Integer roomNumber, Date checkin, Date checkOut) throws DomainException {
+		if(!checkOut.after(checkin)) {
+			throw new DomainException(" Check-out date must be after check-in date");
+		}
 		this.roomNumber = roomNumber;
 		this.checkin = checkin;
 		this.checkOut = checkOut;
@@ -49,15 +54,15 @@ public class Resevation {
 				+ ", "
 				+ duration() + " nights.";
 	}
-	public String updateDates(Date checkin, Date checkout) {
+	
+	public void updateDates(Date checkin, Date checkout) throws DomainException {
 		Date now = new Date();
 		if(checkin.before(now) || checkout.before(now)) {
-			return " Resevation dates for update must be future dates";
-		}else if(!checkout.after(checkin)) {
-			return " Check-out date must be after check-in date";
+			throw new DomainException(" Resevation dates for update must be future dates");
+		} if(!checkout.after(checkin)) {
+			throw new DomainException(" Check-out date must be after check-in date");
 		}
 		this.checkin = checkin;
 		this.checkOut = checkout;
-		return null;
 	}
 }
